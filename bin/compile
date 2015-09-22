@@ -28,13 +28,13 @@ cat $PROFILE_PATH | indent
 
 # install
 while read line; do
-  echo"-----> brew $brew_command"
+  echo "-----> brew $line"
   brew $line | indent
   if [ $? -ne 0 ]; then
     rm "$HOME/$VENDOR_DIR/linuxbrew"
     exit 1
   fi
-done < "$BUILD_DIR/.brewfile"
+done < "$BUILD_DIR/.cellar"
 
 # save '.linuxbrew'
 (cd $HOME && tar cf - .linuxbrew) | (cd $BUILD_DIR && tar xf -)
