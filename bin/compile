@@ -48,4 +48,5 @@ done < "$BUILD_DIR/.cellar"
 
 # save '.linuxbrew'
 (cd $HOME && tar cf - .linuxbrew) | (cd $BUILD_DIR && tar xf -)
+rm -rf $CACHE_DIR/.linuxbrew
 cp -TR $HOME/.linuxbrew $CACHE_DIR/.linuxbrew
