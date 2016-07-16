@@ -4,15 +4,16 @@ indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Installing linuxbrew"
 BUILD_DIR=$1
 CACHE_DIR=$2
 VENDOR_DIR="vendor"
 
 if [ -e $CACHE_DIR/.linuxbrew ]; then
+  echo "-----> Restoring linuxbrew from cache"
   cp -TR $CACHE_DIR/.linuxbrew $HOME/.linuxbrew
-  brew update
+  brew update | indent
 else
+  echo "-----> Installing linuxbrew"
   mkdir -p $CACHE_DIR
   git clone "https://github.com/Linuxbrew/brew.git" \
     "$HOME/.linuxbrew" 2>&1 | indent
@@ -29,6 +30,7 @@ export MANPATH="\$HOME/.linuxbrew/share/man:\$MANPATH"
 export INFOPATH="\$HOME/.linuxbrew/share/info:\$INFOPATH"
 export LIBRARY_PATH="\$HOME/.linuxbrew/lib:\$LIBRARY_PATH"
 export LD_LIBRARY_PATH="\$HOME/.linuxbrew/lib:\$LD_LIBRARY_PATH"
+export HOMEBREW_MAKE_JOBS=`nproc`
 _EOT_
 
 . $PROFILE_PATH
