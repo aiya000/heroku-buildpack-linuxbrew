@@ -36,5 +36,7 @@ while read line; do
   fi
 done < "$BUILD_DIR/.cellar"
 
+ldconfig
+
 # save '.linuxbrew'
 (cd $HOME && tar cf - .linuxbrew) | (cd $BUILD_DIR && tar xf -)
