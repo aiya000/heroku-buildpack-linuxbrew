@@ -6,12 +6,19 @@ indent() {
 
 echo "-----> Installing linuxbrew"
 BUILD_DIR=$1
+CACHE_DIR=$2
 VENDOR_DIR="vendor"
 
-git clone "https://github.com/Linuxbrew/brew.git" \
-  "$HOME/.linuxbrew" 2>&1 | indent
-if [ $? -ne 0 ]; then
-  exit 1
+if [ -e $CACHE_DIR/.linuxbrew ]; then
+  cp -TR $CACHE_DIR/.linuxbrew $HOME/.linuxbrew
+  brew update
+else
+  mkdir -p $CACHE_DIR
+  git clone "https://github.com/Linuxbrew/brew.git" \
+    "$HOME/.linuxbrew" 2>&1 | indent
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
 fi
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/linuxbrew.sh"
@@ -20,6 +27,7 @@ cat << _EOT_ > $PROFILE_PATH
 export PATH="\$HOME/.linuxbrew/bin:\$PATH"
 export MANPATH="\$HOME/.linuxbrew/share/man:\$MANPATH"
 export INFOPATH="\$HOME/.linuxbrew/share/info:\$INFOPATH"
+export LIBRARY_PATH="\$HOME/.linuxbrew/lib:\$LIBRARY_PATH"
 export LD_LIBRARY_PATH="\$HOME/.linuxbrew/lib:\$LD_LIBRARY_PATH"
 _EOT_
 
@@ -38,3 +46,4 @@ done < "$BUILD_DIR/.cellar"
 
 # save '.linuxbrew'
 (cd $HOME && tar cf - .linuxbrew) | (cd $BUILD_DIR && tar xf -)
+cp -TR $HOME/.linuxbrew $CACHE_DIR/.linuxbrew
