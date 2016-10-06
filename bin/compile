@@ -38,8 +38,8 @@ cat $PROFILE_PATH | indent
 
 # install
 while read line; do
-  echo "-----> brew $line"
-  brew $line | indent
+  echo "-----> brew install $line"
+  brew install $line | indent
   if [ $? -ne 0 ]; then
     rm "$HOME/$VENDOR_DIR/linuxbrew"
     exit 1
